@@ -1,6 +1,6 @@
 spring:
   ai:
-    openai:
+    anthropic:
       api-key: ${KEY}
 
 server:
