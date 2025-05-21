@@ -1,10 +1,8 @@
 spring:
   ai:
-    anthropic:
+    ollama:
       chat:
-        options:
-          model: claude-3-7-sonnet-20250219
-      api-key: ${KEY}
+        model: llama3.2
 
 server:
   port: 8080
