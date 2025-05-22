@@ -22,6 +22,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     public BoardGameServiceImpl(ChatClient.Builder chatClientBuilder) {
         ChatOptions chatOptions = ChatOptions.builder()
+                .temperature(0.7)
                 .build();
 
         this.chatClient = chatClientBuilder
@@ -32,7 +33,7 @@ public class BoardGameServiceImpl implements BoardGameService {
     }
 
     @Override
-    @Retryable(retryFor = AnswerNotRelevantException.class)  //
+    @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)  //
     public Answer askQuestion(Question question) {
         String answerText = chatClient.prompt()
                 .user(question.question())
@@ -44,7 +45,7 @@ public class BoardGameServiceImpl implements BoardGameService {
         return new Answer(answerText);
     }
 
-    @Recover //
+    @Recover
     public Answer recover(AnswerNotRelevantException e) {
         return new Answer("I'm sorry, I wasn't able to answer the question.");
     }
