@@ -3,6 +3,8 @@ package com.example.study.service;
 import com.example.study.exceptions.AnswerNotRelevantException;
 import com.example.study.model.Answer;
 import com.example.study.model.Question;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
 import org.springframework.ai.chat.prompt.ChatOptions;
@@ -17,12 +19,14 @@ import java.util.List;
 @Service
 public class BoardGameServiceImpl implements BoardGameService {
 
+    private static final Logger log = LoggerFactory.getLogger(BoardGameServiceImpl.class);
+
     private final ChatClient chatClient;
     private final RelevancyEvaluator evaluator;
 
     public BoardGameServiceImpl(ChatClient.Builder chatClientBuilder) {
         ChatOptions chatOptions = ChatOptions.builder()
-                .temperature(0.7)
+                .temperature(0.9)
                 .build();
 
         this.chatClient = chatClientBuilder
@@ -40,6 +44,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                 .call()
                 .content();
 
+        log.info(answerText);
         evaluateRelevancy(question, answerText);
 
         return new Answer(answerText);
@@ -47,6 +52,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Recover
     public Answer recover(AnswerNotRelevantException e) {
+        log.warn(e.getMessage());
         return new Answer("I'm sorry, I wasn't able to answer the question.");
     }
 
