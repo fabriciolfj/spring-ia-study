@@ -4,6 +4,7 @@ package com.example.study.controller;
 import com.example.study.model.Answer;
 import com.example.study.model.Question;
 import com.example.study.service.BoardGameService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ public class AskController {
     }
 
     @PostMapping("/ask")
-    public Answer ask(@RequestBody Question question) {
+    public Answer ask(@RequestBody @Valid Question question) {
         return boardGameService.askQuestion(question);
     }
 

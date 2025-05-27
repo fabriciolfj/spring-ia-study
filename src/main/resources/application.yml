@@ -1,13 +1,24 @@
 spring:
   ai:
-    ollama:
+    #ollama:
+      #chat:
+        #model: deepcoder
+    anthropic:
       chat:
-        model: deepcoder
-    #anthropic:
-    #  chat:
-    #    options:
-    #      model: claude-3-7-sonnet-20250219
-    #  api-key: ${KEY}
+        options:
+          model: claude-3-7-sonnet-20250219
+      api-key: ${KEY}
 
 server:
   port: 8080
+
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE
+
+
+logbook:
+  format:
+    style: http
