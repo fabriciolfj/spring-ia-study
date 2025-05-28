@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.evaluation.RelevancyEvaluator;
+import org.springframework.ai.chat.metadata.Usage;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.evaluation.EvaluationRequest;
 import org.springframework.ai.evaluation.EvaluationResponse;
@@ -47,19 +49,22 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)
     public Answer askQuestion(Question question) {
         final String rules = gameRulesService.getRulesFor(question.gameTitle());
-        var answerText = chatClient.prompt()
+        var response = chatClient.prompt()
                 .system(userSpec -> userSpec
                         .text(promptTemplate)
                         .param("gameTitle", question.gameTitle())
                         .param("rules", rules))
                 .user(question.question())
                 .call()
-                .entity(Answer.class);
+                .responseEntity(Answer.class);
 
-        log.info(answerText.answer());
-        evaluateRelevancy(question, answerText.answer());
+        log.info(response.entity().answer());
+        evaluateRelevancy(question, response.entity().answer());
 
-        return answerText;
+        var metadata = response.getResponse().getMetadata();
+        logUsage(metadata.getUsage());
+
+        return response.entity();
     }
 
     @Recover
@@ -76,5 +81,13 @@ public class BoardGameServiceImpl implements BoardGameService {
             log.warn("nao passou");
             //throw new AnswerNotRelevantException(question.question(), answerText); //
         }
+    }
+
+
+    private void logUsage(Usage usage) {
+        log.info("Token usage: prompt={}, generation={}, total={}",
+                usage.getPromptTokens(),
+                usage.getCompletionTokens(),
+                usage.getTotalTokens());
     }
 }
