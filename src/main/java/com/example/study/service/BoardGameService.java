@@ -2,8 +2,9 @@ package com.example.study.service;
 
 import com.example.study.model.Answer;
 import com.example.study.model.Question;
+import reactor.core.publisher.Flux;
 
 public interface BoardGameService {
 
-    Answer askQuestion(final Question question);
+    Flux<String> askQuestion(final Question question);
 }

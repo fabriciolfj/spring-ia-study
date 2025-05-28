@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -45,21 +46,21 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)
-    public Answer askQuestion(Question question) {
+    public Flux<String> askQuestion(Question question) {
         final String rules = gameRulesService.getRulesFor(question.gameTitle());
-        var answerText = chatClient.prompt()
+        return chatClient.prompt()
                 .system(userSpec -> userSpec
                         .text(promptTemplate)
                         .param("gameTitle", question.gameTitle())
                         .param("rules", rules))
                 .user(question.question())
-                .call()
-                .entity(Answer.class);
+                .stream()
+                .content();
 
-        log.info(answerText.answer());
+        /*log.info(answerText.answer());
         evaluateRelevancy(question, answerText.answer());
 
-        return answerText;
+        return answerText;*/
     }
 
     @Recover

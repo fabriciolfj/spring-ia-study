@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping
@@ -21,7 +22,7 @@ public class AskController {
     }
 
     @PostMapping("/ask")
-    public Answer ask(@RequestBody @Valid Question question) {
+    public Flux<String> ask(@RequestBody @Valid Question question) {
         return boardGameService.askQuestion(question);
     }
 
