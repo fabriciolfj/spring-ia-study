@@ -47,19 +47,19 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)
     public Answer askQuestion(Question question) {
         final String rules = gameRulesService.getRulesFor(question.gameTitle());
-        String answerText = chatClient.prompt()
+        var answerText = chatClient.prompt()
                 .system(userSpec -> userSpec
                         .text(promptTemplate)
                         .param("gameTitle", question.gameTitle())
                         .param("rules", rules))
                 .user(question.question())
                 .call()
-                .content();
+                .entity(Answer.class);
 
-        log.info(answerText);
-        evaluateRelevancy(question, answerText);
+        log.info(answerText.answer());
+        evaluateRelevancy(question, answerText.answer());
 
-        return new Answer(question.gameTitle(), answerText);
+        return answerText;
     }
 
     @Recover
