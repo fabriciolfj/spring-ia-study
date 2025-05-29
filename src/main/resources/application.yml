@@ -3,6 +3,9 @@ spring:
     #ollama:
       #chat:
         #model: deepcoder
+    vectorstore:
+      qdrant:
+        collection-name: GameRules
     anthropic:
       chat:
         options:
@@ -10,7 +13,7 @@ spring:
       api-key: ${KEY}
 
 server:
-  port: 8080
+  port: 8081
 
 logging:
   level:

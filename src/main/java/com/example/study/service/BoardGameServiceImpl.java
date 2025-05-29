@@ -48,7 +48,8 @@ public class BoardGameServiceImpl implements BoardGameService {
     @Override
     @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)
     public Answer askQuestion(Question question) {
-        final String rules = gameRulesService.getRulesFor(question.gameTitle());
+        //quebrando em 2 mensagens
+        final String rules = gameRulesService.getRulesFor(question.gameTitle(), question.question());
         var response = chatClient.prompt()
                 .system(userSpec -> userSpec
                         .text(promptTemplate)
