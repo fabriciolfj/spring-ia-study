@@ -34,7 +34,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     public BoardGameServiceImpl(ChatClient.Builder chatClientBuilder, GameRulesService gameRulesService) {
         ChatOptions chatOptions = ChatOptions.builder()
-                .temperature(0.3)
+                .temperature(0.3)//criatividade ou aleatoriedade das respostas geradas pelo modelo
                 .build();
 
         this.chatClient = chatClientBuilder
