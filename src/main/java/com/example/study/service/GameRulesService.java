@@ -30,10 +30,10 @@ public class GameRulesService {
     public String getRulesFor(String gameName, String question) {
         SearchRequest searchRequest = SearchRequest.builder()
                 .query(question)
-                .topK(6) //quantidade de documentos com base na similaridade
-                .similarityThreshold(0.5) //nivel de similaridade (maior refinamento)
-                .filterExpression(new FilterExpressionBuilder()
-                        .eq("gameTitle", normalizeGameTitle(gameName)).build())
+                .topK(20) //quantidade de documentos com base na similaridade
+                .similarityThreshold(0.1) //nivel de similaridade (maior refinamento)
+                //.filterExpression(new FilterExpressionBuilder()
+                 //       .eq("gameTitle", normalizeGameTitle(gameName)).build())
                 .build();
 
         log.info("search request: {}", searchRequest);
