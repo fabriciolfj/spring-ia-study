@@ -1,5 +1,7 @@
 package com.example.study.config;
 
+import com.example.study.chatmemory.MongoChatMemory;
+import com.example.study.repository.ConversationRepository;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.ChatModelCallAdvisor;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
@@ -17,10 +19,8 @@ import org.springframework.context.annotation.Configuration;
 public class AiConfig {
 
     @Bean
-    ChatMemory chatMemory() {
-        return MessageWindowChatMemory.builder()
-                .chatMemoryRepository(new InMemoryChatMemoryRepository())
-                .build();
+    ChatMemory chatMemory(ConversationRepository repository) {
+        return new MongoChatMemory(repository);
     }
 
     @Bean

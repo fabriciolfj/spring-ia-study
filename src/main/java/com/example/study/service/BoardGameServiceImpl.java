@@ -6,7 +6,10 @@ import com.example.study.model.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.PromptChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.InMemoryChatMemoryRepository;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -30,7 +33,7 @@ public class BoardGameServiceImpl implements BoardGameService {
 
     @Override
     @Retryable(retryFor = AnswerNotRelevantException.class, maxAttempts = 3)
-    public Answer askQuestion(Question question) {
+    public Answer askQuestion(Question question, String conversationId) {
         String gameNameMatch = String.format(
                 "gameTitle == '%s'",
                 normalizeGameTitle(question.gameTitle()));
@@ -39,9 +42,12 @@ public class BoardGameServiceImpl implements BoardGameService {
                 .system(userSpec -> userSpec
                         .text(promptTemplate)
                         .param("gameTitle", question.gameTitle())
-                        .param("question_answer_context", gameNameMatch))
+                        .param("question_answer_context", gameNameMatch)
+                        )
                 .user(question.question())
-                .advisors(advisorSpec -> advisorSpec.param(QuestionAnswerAdvisor.FILTER_EXPRESSION, gameNameMatch))
+                .advisors(advisorSpec -> advisorSpec.param(QuestionAnswerAdvisor.FILTER_EXPRESSION, gameNameMatch).
+                            param(ChatMemory.CONVERSATION_ID, conversationId)
+                        )
                 .call()
                 .responseEntity(Answer.class);
 

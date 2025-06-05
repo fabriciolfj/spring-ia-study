@@ -5,5 +5,5 @@ import com.example.study.model.Question;
 
 public interface BoardGameService {
 
-    Answer askQuestion(final Question question);
+    Answer askQuestion(final Question question, String conversationId);
 }

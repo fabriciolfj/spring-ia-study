@@ -5,10 +5,7 @@ import com.example.study.model.Answer;
 import com.example.study.model.Question;
 import com.example.study.service.BoardGameService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -21,8 +18,10 @@ public class AskController {
     }
 
     @PostMapping("/ask")
-    public Answer ask(@RequestBody @Valid Question question) {
-        return boardGameService.askQuestion(question);
+    public Answer ask(@RequestBody @Valid Question question,
+                      @RequestHeader(name = "X_AI_CONVERSATION_ID", defaultValue = "padrao")
+                      final String conversationId) {
+        return boardGameService.askQuestion(question, conversationId);
     }
 
 }

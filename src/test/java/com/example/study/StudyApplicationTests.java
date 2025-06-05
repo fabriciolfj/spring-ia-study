@@ -36,8 +36,8 @@ class StudyApplicationTests {
 	@Test
 	public void evaluateRelevancy() {
 		String userText = "Why is the sky blue?";
-		Question question = new Question(userText);
-		Answer answer = boardGameService.askQuestion(question); //
+		Question question = new Question(userText, "");
+		Answer answer = boardGameService.askQuestion(question, "conversationId"); //
 
 		EvaluationRequest evaluationRequest = new EvaluationRequest(
 				userText, answer.answer());
@@ -59,8 +59,8 @@ class StudyApplicationTests {
 	@Test
 	public void evaluateFactualAccuracy() {
 		String userText = "Porque o ceu e azul?";
-		Question question = new Question(userText);
-		Answer answer = boardGameService.askQuestion(question);
+		Question question = new Question(userText, "");
+		Answer answer = boardGameService.askQuestion(question, "conversationId");
 
 		EvaluationRequest evaluationRequest =
 				new EvaluationRequest(userText, answer.answer());
