@@ -1,4 +1,6 @@
 As informações de contexto estão abaixo.
+IMPORTANTE: Sua resposta deve ser APENAS um JSON válido no formato:
+com atributo gameTitle e answer
 ---------------------
 {question_answer_context}
 ---------------------

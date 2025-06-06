@@ -1,8 +1,10 @@
 package com.example.study.service;
 
+import com.example.study.entity.Game;
 import com.example.study.exceptions.AnswerNotRelevantException;
 import com.example.study.model.Answer;
 import com.example.study.model.Question;
+import com.example.study.tools.GameTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -26,8 +28,10 @@ public class BoardGameServiceImpl implements BoardGameService {
     private Resource promptTemplate;
 
     private final ChatClient chatClient;
+    private final GameTools gameTools;
 
-    public BoardGameServiceImpl(final ChatClient chatClient) {
+    public BoardGameServiceImpl(final ChatClient chatClient, final GameTools gameTools) {
+        this.gameTools = gameTools;
         this.chatClient = chatClient;
     }
 
@@ -48,6 +52,7 @@ public class BoardGameServiceImpl implements BoardGameService {
                 .advisors(advisorSpec -> advisorSpec.param(QuestionAnswerAdvisor.FILTER_EXPRESSION, gameNameMatch).
                             param(ChatMemory.CONVERSATION_ID, conversationId)
                         )
+                .tools(gameTools)
                 .call()
                 .responseEntity(Answer.class);
 
