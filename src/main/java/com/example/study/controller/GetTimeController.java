@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GetTimeController {
 
-    private static final String CURRENT_TIME_TEMPLATE = "quanl a hora atual da {city}?";
+    private static final String CURRENT_TIME_TEMPLATE = "qual a hora atual da {city}?";
 
     private final ChatClient chatClient;
     private final TimeTools timeTools;
