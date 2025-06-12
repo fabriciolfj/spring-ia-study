@@ -30,8 +30,8 @@ public class AiConfig {
             VectorStore vectorStore) {
         return chatClientBuilder
                 .defaultAdvisors(
-                        VectorStoreChatMemoryAdvisor.builder(vectorStore).build(),
-                        QuestionAnswerAdvisor.builder(vectorStore).searchRequest(SearchRequest.builder().build()).build())
+                        VectorStoreChatMemoryAdvisor.builder(vectorStore).build(), // memoria do chat
+                        QuestionAnswerAdvisor.builder(vectorStore).searchRequest(SearchRequest.builder().build()).build()) //fazendo rag
                 .build();
     }
 }

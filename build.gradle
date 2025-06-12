@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.springframework.ai:spring-ai-starter-model-anthropic'
 	implementation 'org.springframework.ai:spring-ai-starter-model-transformers'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.zalando:logbook-spring-boot-starter:3.9.0'
 	implementation 'org.springframework.ai:spring-ai-starter-vector-store-qdrant'
 	runtimeOnly 'com.h2database:h2'

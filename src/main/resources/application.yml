@@ -25,6 +25,7 @@ spring:
         #model: deepcoder
     vectorstore:
       qdrant:
+        port: 6334
         collection-name: GameRules
     anthropic:
       chat:
@@ -41,6 +42,13 @@ logging:
       zalando:
         logbook: TRACE
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
 
 logbook:
   format:
