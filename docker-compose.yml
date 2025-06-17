@@ -26,6 +26,45 @@ services:
     networks:
       - mongo-compose-network
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus-config.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - 9090:9090
+
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - net
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+# ...
+
+volumes:
+  # ...
+  grafana-storage: {}
+
 networks:
+  net:
+    driver: bridge
   mongo-compose-network:
     driver: bridge

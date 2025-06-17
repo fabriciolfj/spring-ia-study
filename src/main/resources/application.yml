@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: jogos
   h2:
     console:
       enabled: true
@@ -42,13 +44,21 @@ logging:
       zalando:
         logbook: TRACE
 
+otlp:
+  tracing:
+    url: http://localhost:4317
+
 management:
+  tracing:
+    sampling:
+      probability: 1.0
   endpoints:
     web:
       exposure:
         include:
           - health
           - metrics
+          - prometheus
 
 logbook:
   format:
